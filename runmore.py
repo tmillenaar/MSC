@@ -186,36 +186,65 @@ for p in range(0,len(values)):
     plt.xticks(rotation='20')
   plt.savefig('pics/'+str(varname)+'_'+str(values[p])+'.png', format='png', figsize=(11, 7), dpi=300, bbox_inches='tight')   
   #plotting mixing column in seperate figure
+  # f, axarr2=plt.subplots(2, 1, sharex='col')
+  # for k in range (2):
+    # #plt.figure(7+k)
+
+    # if ( (os.stat("main_mixing.xy").st_size != 0) or (os.stat("secundary_mixing.xy").st_size != 0) ):
+        # counter = 0
+        # imld = []
+        # counters = []
+        # if (k==0):
+          # if os.stat("main_mixing.xy").st_size != 0:
+            # tseries = np.loadtxt('main_mixing.xy')
+        # elif (k==1):
+          # if os.stat("secundary_mixing.xy").st_size != 0 :
+            # tseries = np.loadtxt('secundary_mixing.xy')
+        # for i in range(len(tseries[:,1])):
+            # if (i > startyear*12+1 and i < endyear*12+1):
+              # imld.append(tseries[i,1])
+              # counters.append(counter)
+              # counter += 1
+        # years = [int(startyear+(3./12.)+(counters[item]+(3./12.))/12.) for item in counters]
+        # #plt2 = plt.plot(years[:],imld[:])
+        # axarr2[k].invert_yaxis()
+        # axarr2[1].set_xlabel('Time [yr]')
+        # axarr2[0].set_ylabel('Depth of unstable column [m]                                            ')
+        # if (k==0):
+          # axarr2[k].set_title('Deep basin')
+        # elif (k==1):
+          # axarr2[k].set_title('Marginal basin', y=1.0)
+        # axarr2[k].plot(tseries[:,0]/12.,tseries[:,1], linewidth=1.0, color=(69./255.,184./255.,222./255.))
+        # axarr2[k].plot(tseries[:,0]/12.,tseries[:,2], linewidth=1.0, color=(158./255.,61./255.,0))
   f, axarr2=plt.subplots(2, 1, sharex='col')
   for k in range (2):
-    #plt.figure(7+k)
+      #plt.figure(7+k)
 
     if ( (os.stat("main_mixing.xy").st_size != 0) or (os.stat("secundary_mixing.xy").st_size != 0) ):
-        counter = 0
-        imld = []
-        counters = []
-        if (k==0):
-          if os.stat("main_mixing.xy").st_size != 0:
-            tseries = np.loadtxt('main_mixing.xy')
-        elif (k==1):
-          if os.stat("secundary_mixing.xy").st_size != 0 :
-            tseries = np.loadtxt('secundary_mixing.xy')
-        for i in range(len(tseries[:,1])):
-            if (i > startyear*12+1 and i < endyear*12+1):
-              imld.append(tseries[i,1])
-              counters.append(counter)
-              counter += 1
-        years = [int(startyear+(3./12.)+(counters[item]+(3./12.))/12.) for item in counters]
-        #plt2 = plt.plot(years[:],imld[:])
-        axarr2[k].invert_yaxis()
-        axarr2[1].set_xlabel('Time [yr]')
-        axarr2[0].set_ylabel('Depth of unstable column [m]                                            ')
-        if (k==0):
-          axarr2[k].set_title('Deep basin')
-        elif (k==1):
-          axarr2[k].set_title('Marginal basin', y=1.0)
-        axarr2[k].plot(tseries[:,0]/12.,tseries[:,1], linewidth=1.0, color=(69./255.,184./255.,222./255.))
-        axarr2[k].plot(tseries[:,0]/12.,tseries[:,2], linewidth=1.0, color=(158./255.,61./255.,0))
+	    counter = 0
+	    imld = []
+	    counters = []
+	    if (k==0):
+	      if os.stat("main_mixing.xy").st_size != 0:
+	        tseries = np.loadtxt('main_mixing.xy')
+	    elif (k==1):
+	        if os.stat("secundary_mixing.xy").st_size != 0 :
+	          tseries = np.loadtxt('secundary_mixing.xy')
+	    for i in range(len(tseries[:,1])):
+	        if (i > startyear*12+1 and i < endyear*12+1):
+	          imld.append(tseries[i,1])
+	          counters.append(counter)
+	          counter += 1
+	    years = [int(startyear+(3./12.)+(counters[item]+(3./12.))/12.) for item in counters]
+	    #plt2 = plt.plot(years[:],imld[:])
+	    axarr2[k].invert_yaxis()
+	    axarr2[1].set_xlabel('Time [yr]')
+	    axarr2[0].set_ylabel('Depth of unstable column [m]                                            ')
+	    if (k==0):
+	      axarr2[k].set_title('Main Column')
+	    elif (k==1):
+	      axarr2[k].set_title('Secundary column')
+	    axarr2[k].plot(tseries[:,0]/12.,tseries[:,1], 's', ms=0.5)
 
   plt.savefig('pics/'+str(varname)+'_'+str(values[p])+'mixing.png', format='png', figsize=(11, 7), dpi=300, bbox_inches='tight')   
 

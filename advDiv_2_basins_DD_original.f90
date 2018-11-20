@@ -407,7 +407,7 @@ do while (t.lt.tmax) 		!Main loop
 	  do while(i<imax(j))  
 ! 	    threshold = rho(i+1,j)
 ! 	    threshold = threshold + 10.
-	    if (rho(i,j) > (rho(i+1,j) +0.0005)) then
+	    if (rho(i,j) > (rho(i+1,j) +0.001)) then
 	      if (iconv(j).eq.0) then
 		tconv(j)= dt
 	      else
