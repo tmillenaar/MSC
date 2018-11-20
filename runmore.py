@@ -6,9 +6,9 @@ import math
 
 #To be modified:
 
-startyear = 10        ## Starts at year 0, month 3
+startyear = 1        ## Starts at year 0, month 3
 start_month = 3        ## [0=jan, 11=dec]
-endyear = 12
+endyear = 10
 
 plot_legend = True
 run_program = True     #if False, tries to plot with existing data
@@ -18,8 +18,8 @@ varname = 'Salt_diff_amp = ' #later on, adds the value of 'values[i]' behind it 
 
 # # For the following line: put in a CSV string and make sure "MYVALUE" appears in setup.txt as value for the approriate variable
 # # 'Values' may not be empty
-#values = [0.05,0.1,0.5,1.0,2,3,4,5] 
-values = [1]
+values = [0.01,0.05,0.10,0.25,0.50,1.0,2.0] 
+# values = [1]
 
 
 

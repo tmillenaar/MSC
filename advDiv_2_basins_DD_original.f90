@@ -61,6 +61,8 @@ real :: Salt_diff_amplifier
 real :: evapamp1
 real :: evapamp2
 real :: Temp_diff_amplifier
+real :: Smean
+real :: Tmean
 
 real, dimension (2) :: L
 real, dimension (2) :: tconv
@@ -224,6 +226,8 @@ close (20)
 close (30)
 
 
+open (11, file= 'main_mean_values.xy')
+open (12, file= 'secundary_mean_values.xy')
 open (21,file= 'main_mixing.xy')
 open (22,file= 'secundary_mixing.xy')
 open (31,file= 'main_forcing.xy')
@@ -635,18 +639,19 @@ do while (t.lt.tmax) 		!Main loop
 			      close (20)
 
 
-			!      Tmean= h(0,1)*dx/2.e0
-			!      Smean= h(0,2)*dx/2.e0
+			     Tmean= Temp(0,j)*dx/2.e0
+			     Smean= Sal(0,j)*dx/2.e0
 			!      HC= h(0,1)*Cp*density(h(0,1),h(0,2))*dx/2.e0
-			!      do i= 1,imax
-			!         Tmean= Tmean + hout(i,1)*dx
-			!         Smean= Smean + hout(i,2)*dx
-			!         HC= HC + h(i,1)*Cp*density(h(i,1),h(i,2))*dx
-			!      end do
-			!      Tmean= Tmean + h(imax+1,1)*dx/2.e0
-			!      Smean= Smean + h(imax+1,2)*dx/2.e0
-			!      Tmean= Tmean/L
-			!      Smean= Smean/L
+			     do i= 1,imax(j)
+			        Tmean= Tmean + TempOut(i,j)*dx
+			        Smean= Smean + SalOut(i,j)*dx
+			        ! HC= HC + h(i,1)*Cp*density(h(i,1),h(i,2))*dx
+			     end do
+			     Tmean= Tmean + Temp(imax(j)+1,j)*dx/2.e0
+			     Smean= Smean + Sal(imax(j)+1,j)*dx/2.e0
+			     Tmean= Tmean/L(1)
+			     Smean= Smean/L(2)
+				 write(10+j,*) Tmean, Smean
 			!      HC= HC + h(imax+1,1)*Cp*density(h(imax+1,1),h(imax+1,2))*dx
 
 			!      Tmean2= 0.e0
@@ -668,6 +673,8 @@ do while (t.lt.tmax) 		!Main loop
 		endif
 end do  !End main loop
 
+close(11)
+close(12)
 close(20)
 close(30)
 close(21)
@@ -727,7 +734,6 @@ if (ibcl == 0) then
 else if (ibcl == 1) then
 
    Dph= ( D(1)+D(0) )/2.e0
-   ! Dph = Db
    h1(0)= h1(1) + (dx/Dph)*bcl1
 
 endif
