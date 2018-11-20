@@ -124,7 +124,7 @@ for j in range(3): 					#Temp, sal and density loop
 	##rotate density values
 	# plt.sca(axarr[2])
 	# plt.xticks(rotation='20')
-	plt.subplots_adjust(left=None, bottom=0.15, right=0.74, top=None,
+	plt.subplots_adjust(left=None, bottom=0.15, right=0.90, top=None,
                 wspace=None, hspace=None)
 plt.savefig('pics/'+Plotname+'.png', format='png', figsize=(11, 7), dpi=300, bbox_inches='tight')   
 
