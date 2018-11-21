@@ -7,8 +7,8 @@ import math
 #To be modified:
 
 startyear = 10        ## Starts at year 0, month 3
-start_month = 3        ## [0=jan, 11=dec]
-endyear = 12
+start_month = 8        ## [0=jan, 11=dec]
+endyear = 14
 
 plot_legend = True
 run_program = True     #if False, tries to plot with existing data

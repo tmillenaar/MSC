@@ -63,6 +63,7 @@ real :: evapamp2
 real :: Temp_diff_amplifier
 real :: Smean
 real :: Tmean
+real :: mean_evap_rate
 
 real, dimension (2) :: L
 real, dimension (2) :: tconv
@@ -126,7 +127,7 @@ open (unit=15, file="setup_data.txt", action='read' )
 read (15, *)  comment, L(1), comment, L(2), comment, tmax, comment, Cp, comment, dx, comment, &
       pb, comment, pc, comment, tau, comment, Tbot, comment, Sbot, comment, flowdepth, comment, &
       strait_depth, comment, strait_width, comment, U_lat,comment,Vol1_width,comment,Vol2_width, comment,&
-      Salt_diff_amplifier, comment, Temp_diff_amplifier, comment, evapamp1, comment, evapamp2
+      Salt_diff_amplifier, comment, Temp_diff_amplifier, comment, evapamp1, comment, evapamp2, comment, mean_evap_rate
 tmax = tmax*yr2sec
 ! ! w0= -0./yr2sec		! advection velocity [m/s] (upward velocity = -ve)
 
@@ -283,21 +284,21 @@ do while (t.lt.tmax) 		!Main loop
 	if (Rho_mean_flowdepth(2) > Rho_mean_flowdepth(1) ) then !Initate flow since "density in bottom of basin 2" > "density in bottom basin 1"
 	    Rho_mean_flowdepth(1)=0. 
 	    Rho_mean_flowdepth(2)=0.
-! 	    do i=0,nint(flowdepth)-1
-! ! 		!!Assuming Vin = Vout en Utop=Ubot 
-! ! 		!!U_lat only determines the transport amount of Vol of water/sec, there is no travel distance or &
-! ! 		!! 	travel time of the lateral water flow in this model (for now at least)
-! 		SS_S(imax(1)-i,1)= max(0.0, (1./(real(flowdepth)))*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
-! 		SS_S(imax(2)-i,2) = min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
-! 		SS_S(i,1)= min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
-! 		SS_S(i,2)= max( 0.0 , (1./(real(flowdepth)))*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
-! 	
-! 		SS_T(imax(1)-i,1)= max(0.0, (1./(flowdepth))*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
-! 		SS_T(imax(2)-i,2) = min( 0.0, (1./(flowdepth))*(-1.)*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
-! 		SS_T(i,1)= min( 0.0, (1./(flowdepth))*(-1.)*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
-! 		SS_T(i,2)= max( 0.0 , (1./(flowdepth))*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
-! 	    end do
-! 	    do i=1,imax(1)
+	    do i=0,nint(flowdepth)-1
+! 		!!Assuming Vin = Vout en Utop=Ubot 
+! 		!!U_lat only determines the transport amount of Vol of water/sec, there is no travel distance or &
+! 		!! 	travel time of the lateral water flow in this model (for now at least)
+		SS_S(imax(1)-i,1)= max(0.0, (1./(real(flowdepth)))*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
+		SS_S(imax(2)-i,2) = min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
+		SS_S(i,1)= min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
+		SS_S(i,2)= max( 0.0 , (1./(real(flowdepth)))*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
+	
+		SS_T(imax(1)-i,1)= max(0.0, (1./(flowdepth))*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
+		SS_T(imax(2)-i,2) = min( 0.0, (1./(flowdepth))*(-1.)*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
+		SS_T(i,1)= min( 0.0, (1./(flowdepth))*(-1.)*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
+		SS_T(i,2)= max( 0.0 , (1./(flowdepth))*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
+	    end do
+	    ! do i=1,imax(1)
 ! ! ! ! 	!set upward advection of main column to that of the lateral velocity (water up/m^2  = water in/surface area vol1)
 ! 		w(i,1)=-dx*(U_lat*strait_depth*strait_width)/(Vol(1))
 ! 		w_salt(i,1)=w(i,1)*Sal(i,1)
@@ -355,9 +356,9 @@ do while (t.lt.tmax) 		!Main loop
 
 		! (evaporation in m/year)
 		  if (j==1) then
-		    evaporation(j)= ramp*0.3*sin((t/yr2sec)*2.*pi)
+		    evaporation(j)= ramp*0.3*sin((t/yr2sec)*2.*pi)+mean_evap_rate
 		  else if (j==2) then
-		    evaporation(j)= ramp*0.3*sin((t/yr2sec)*2.*pi)
+		    evaporation(j)= ramp*0.3*sin((t/yr2sec)*2.*pi)+mean_evap_rate
 		  end if
 
 		! set boundary conditions
@@ -404,33 +405,32 @@ do while (t.lt.tmax) 		!Main loop
 	    p= max( pb, pc + (pb-pc)*(tconv(j)/tau) )
 	    if (noConv) p= pb
 	    D(i,j)= Salt_diff_amplifier*10**p
-	    D_T(i,j)= 10**p
+	    D_T(i,j)= Temp_diff_amplifier*10**p
 	  end do
 	else
 	i=0
 	  do while(i<imax(j))  
 ! 	    threshold = rho(i+1,j)
 ! 	    threshold = threshold + 10.
-	    if (rho(i,j) > (rho(i+1,j) +0.001)) then
+	    if (rho(i,j) > (rho(i+1,j) +0.0005)) then
 	      if (iconv(j).eq.0) then
-		tconv(j)= dt
+			tconv(j)= dt
 	      else
-		tconv(j)= tconv(j) + dt
+			tconv(j)= tconv(j) + dt
 	      endif
 	      p= min( pc, pb + (pc-pb)*(tconv(j)/tau) )
 	      if (noConv) p= pb
 	      D(i,j)= 10.**p
-	      D(i-1,j)= 10.**p
-	      D(i+1,j)= 10.**p
+	      ! D(i-1,j)= 10.**p
+	      ! D(i+1,j)= 10.**p
 	      D_T(i,j)= 10.**p
-	      D_T(i-1,j)= 10.**p
-	      D_T(i+1,j)= 10.**p
+	      ! D_T(i-1,j)= 10.**p
+	      ! D_T(i+1,j)= 10.**p
 	      imld(i,j)=i
-	      imld(i+1,j)=i+1
-	      imld(i-1,j)=i-1
+	      ! imld(i+1,j)=i+1
+	      ! imld(i-1,j)=i-1
 	      no_conv_in_col = .false.
-	      i=i+2
-! 	      print*, 'okeej'
+	      i=i+1
 	    else
 	      imld(i,j)=0
 	      
