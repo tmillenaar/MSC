@@ -13,12 +13,14 @@ Sbot= 			276.0
 flowdepth=		5
 strait_depth= 		500.
 strait_width= 		6000
-U_lat= 			0.01
-width_basin1:		80000.
-width_basin2:		50000.
+U_lat= 			0.001
+width_basin1:		  15000.
+width_basin2:		  5000.
+length_basin1=        80000 
+length-basin2=        80000
 
-Salt_diff_amplifier=	1
-Temp_diff_amplifier=	1
+Salt_diff_amplifier=	0.1
+Temp_diff_amplifier=	1.
 evaporation_amplifier1= 0.3
 evaporation_amplifier2= 0.3
 mean_evap_rate=         0.0

@@ -7,7 +7,7 @@ import math
 #To be modified:
 
 startyear = 10        ## Starts at year 0, month 3
-start_month = 8        ## [0=jan, 11=dec]
+start_month = 5        ## [0=jan, 11=dec]
 endyear = 14
 
 plot_legend = True
@@ -247,6 +247,7 @@ for p in range(0,len(values)):
 	    axarr2[k].plot(tseries[:,0]/12.,tseries[:,1], 's', ms=0.5)
 
   plt.savefig('pics/'+str(varname)+'_'+str(values[p])+'mixing.png', format='png', figsize=(11, 7), dpi=300, bbox_inches='tight')   
+  
 
 #Plotting legend:
 if (plot_legend == True):

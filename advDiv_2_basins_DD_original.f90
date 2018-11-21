@@ -44,6 +44,8 @@ real :: Tbot
 real :: Sbot
 real :: Vol1_width
 real :: Vol2_width
+real :: Vol1_length
+real :: Vol2_length
 real :: Vol1
 real :: Vol2
 real :: density
@@ -127,7 +129,8 @@ open (unit=15, file="setup_data.txt", action='read' )
 read (15, *)  comment, L(1), comment, L(2), comment, tmax, comment, Cp, comment, dx, comment, &
       pb, comment, pc, comment, tau, comment, Tbot, comment, Sbot, comment, flowdepth, comment, &
       strait_depth, comment, strait_width, comment, U_lat,comment,Vol1_width,comment,Vol2_width, comment,&
-      Salt_diff_amplifier, comment, Temp_diff_amplifier, comment, evapamp1, comment, evapamp2, comment, mean_evap_rate
+      Vol1_length,comment,Vol2_length,comment,Salt_diff_amplifier, comment, Temp_diff_amplifier, comment, &
+	  evapamp1, comment, evapamp2, comment, mean_evap_rate
 tmax = tmax*yr2sec
 ! ! w0= -0./yr2sec		! advection velocity [m/s] (upward velocity = -ve)
 
@@ -139,8 +142,8 @@ tmax = tmax*yr2sec
 Db= 10**pb
 Dc= 10**pc
 
-Vol(1) = Vol1_width*1.e5*dx		!Vol=width*length*dx NOTE: put dx here and not flowdepth ...
-Vol(2) = Vol2_width*1.e5*dx			!...since larger flowdepth does not mean more volume	
+Vol(1) = Vol1_width*Vol1_length*dx		!Vol=width*length*dx NOTE: put dx here and not flowdepth ...
+Vol(2) = Vol2_width*Vol2_length*dx			!...since larger flowdepth does not mean more volume	
 
 ! ! write (*,'(a,f8.2)') 'FTCS: max time step set by diffusion [s] = ', (dx*dx)/(2.*Dc)
 ! ! if (w0 .ne. 0.) then
@@ -281,7 +284,7 @@ do while (t.lt.tmax) 		!Main loop
 	end do
 	Rho_mean_flowdepth(1) = Rho_mean_flowdepth(1)/(flowdepth+1)
 	Rho_mean_flowdepth(2) = Rho_mean_flowdepth(2)/(flowdepth+1)
-	if (Rho_mean_flowdepth(2) > Rho_mean_flowdepth(1) ) then !Initate flow since "density in bottom of basin 2" > "density in bottom basin 1"
+	if (Rho_mean_flowdepth(2) > Rho_mean_flowdepth(1) .and. t>11*yr2sec ) then !Initate flow since "density in bottom of basin 2" > "density in bottom basin 1"
 	    Rho_mean_flowdepth(1)=0. 
 	    Rho_mean_flowdepth(2)=0.
 	    do i=0,nint(flowdepth)-1
