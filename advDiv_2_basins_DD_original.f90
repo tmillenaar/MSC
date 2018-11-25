@@ -287,31 +287,31 @@ do while (t.lt.tmax) 		!Main loop
 	if (Rho_mean_flowdepth(2) > Rho_mean_flowdepth(1) .and. t>11*yr2sec ) then !Initate flow since "density in bottom of basin 2" > "density in bottom basin 1"
 	    Rho_mean_flowdepth(1)=0. 
 	    Rho_mean_flowdepth(2)=0.
-	    do i=0,nint(flowdepth)-1
-! 		!!Assuming Vin = Vout en Utop=Ubot 
-! 		!!U_lat only determines the transport amount of Vol of water/sec, there is no travel distance or &
-! 		!! 	travel time of the lateral water flow in this model (for now at least)
-		SS_S(imax(1)-i,1)= max(0.0, (1./(real(flowdepth)))*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
-		SS_S(imax(2)-i,2) = min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
-		SS_S(i,1)= min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
-		SS_S(i,2)= max( 0.0 , (1./(real(flowdepth)))*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
+	    ! do i=0,nint(flowdepth)-1
+! ! 		!!Assuming Vin = Vout en Utop=Ubot 
+! ! 		!!U_lat only determines the transport amount of Vol of water/sec, there is no travel distance or &
+! ! 		!! 	travel time of the lateral water flow in this model (for now at least)
+		! SS_S(imax(1)-i,1)= max(0.0, (1./(real(flowdepth)))*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
+		! SS_S(imax(2)-i,2) = min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
+		! SS_S(i,1)= min( 0.0, (1./(real(flowdepth)))*(-1.)*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
+		! SS_S(i,2)= max( 0.0 , (1./(real(flowdepth)))*(Sal(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
 	
-		SS_T(imax(1)-i,1)= max(0.0, (1./(flowdepth))*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
-		SS_T(imax(2)-i,2) = min( 0.0, (1./(flowdepth))*(-1.)*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
-		SS_T(i,1)= min( 0.0, (1./(flowdepth))*(-1.)*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
-		SS_T(i,2)= max( 0.0 , (1./(flowdepth))*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
+		! SS_T(imax(1)-i,1)= max(0.0, (1./(flowdepth))*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(1) )	! @ maxdepth of basin 1: SS= + salinity at maxdepth basin 2
+		! SS_T(imax(2)-i,2) = min( 0.0, (1./(flowdepth))*(-1.)*(Temp(imax(2)-i,2) * strait_depth * strait_width * U_lat)/Vol(2) )	! @ maxdepth of basin 2: SS= - salinity at maxdepth basin 2
+		! SS_T(i,1)= min( 0.0, (1./(flowdepth))*(-1.)*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(1))!8.**(-6) )		! @ surface of basin 1: SS= - salinity at surface basin 1
+		! SS_T(i,2)= max( 0.0 , (1./(flowdepth))*(Temp(i,1) * strait_depth * strait_width * U_lat)/Vol(2) )			! @ surface of basin 2: SS= + salinity at surface basin 1
+	    ! end do
+	    do i=1,imax(1)
+! ! ! 	!set upward advection of main column to that of the lateral velocity (water up/m^2  = water in/surface area vol1)
+		w(i,1)=-dx*(U_lat*strait_depth*strait_width)/(Vol(1))
+		w_salt(i,1)=w(i,1)*Sal(i,1)
+		w_Temp(i,1)=w(i,1)*Temp(i,1)
+		if (i<imax(2)+1) then
+		    w(i,2)=dx*(U_lat*strait_depth*strait_width)/(Vol(2))		!set downward advection of secundary column ''
+		    w_salt(i,2)=w(i,2)*Sal(i,2)
+		    w_Temp(i,2)=w(i,2)*Temp(i,2)
+		end if
 	    end do
-	    ! do i=1,imax(1)
-! ! ! ! 	!set upward advection of main column to that of the lateral velocity (water up/m^2  = water in/surface area vol1)
-! 		w(i,1)=-dx*(U_lat*strait_depth*strait_width)/(Vol(1))
-! 		w_salt(i,1)=w(i,1)*Sal(i,1)
-! 		w_Temp(i,1)=w(i,1)*Temp(i,1)
-! 		if (i<imax(2)+1) then
-! 		    w(i,2)=dx*(U_lat*strait_depth*strait_width)/(Vol(2))		!set downward advection of secundary column ''
-! 		    w_salt(i,2)=w(i,2)*Sal(i,2)
-! 		    w_Temp(i,2)=w(i,2)*Temp(i,2)
-! 		end if
-! 	    end do
 	else !In which case the density trigger is not activated
 	    do i=0,imax(1)	! Set advection and SS to 0 since there is no flow
 		w(i,1)=0.	
@@ -349,10 +349,10 @@ do while (t.lt.tmax) 		!Main loop
       Dmax = max(maxval(D),maxval(D_T)) 
       dt = 0.9*(dx*dx)/(2.e0*Dmax)		!timestep set by diffusion only
     endif
-    if ( dt < 0.5 ) then !To avoid extreme runtimes. It generally works fine in practice but may bring artifacts. &
+    if ( dt < 0.0005 ) then !To avoid extreme runtimes. It generally works fine in practice but may bring artifacts. &
 			      ! If this happens, the results are clearly wrong or 'NAN'
-	dt = 0.5
-	print*, 'Error, dt too small, dt set to 0.5s for this iteration'
+	dt = 0.0005
+	print*, 'Error, dt too small, dt set to 0.0005s for this iteration'
     endif
      
 		do j= 1,2			!Dual basin loop, where j(1)= main basin and j(2)= secundary (shallower) basin
@@ -652,9 +652,9 @@ do while (t.lt.tmax) 		!Main loop
 			     end do
 			     Tmean= Tmean + Temp(imax(j)+1,j)*dx/2.e0
 			     Smean= Smean + Sal(imax(j)+1,j)*dx/2.e0
-			     Tmean= Tmean/L(1)
-			     Smean= Smean/L(2)
-				 write(10+j,*) Tmean, Smean
+			     Tmean= Tmean/L(j)
+			     Smean= Smean/L(j)
+				 write(10+j,*) t, Tmean, Smean
 			!      HC= HC + h(imax+1,1)*Cp*density(h(imax+1,1),h(imax+1,2))*dx
 
 			!      Tmean2= 0.e0

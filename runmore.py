@@ -8,10 +8,11 @@ import math
 
 startyear = 10        ## Starts at year 0, month 3
 start_month = 5        ## [0=jan, 11=dec]
-endyear = 14
+endyear = 13
 
 plot_legend = True
-run_program = True     #if False, tries to plot with existing data
+plot_mean_values = True
+run_program = False     #if False, tries to plot with existing data
 
 varname = 'Salt_diff_amp = ' #later on, adds the value of 'values[i]' behind it as well
 
@@ -218,7 +219,6 @@ for p in range(0,len(values)):
         # axarr2[k].plot(tseries[:,0]/12.,tseries[:,2], linewidth=1.0, color=(158./255.,61./255.,0))
   f, axarr2=plt.subplots(2, 1, sharex='col')
   for k in range (2):
-      #plt.figure(7+k)
 
     if ( (os.stat("main_mixing.xy").st_size != 0) or (os.stat("secundary_mixing.xy").st_size != 0) ):
 	    counter = 0
@@ -241,13 +241,27 @@ for p in range(0,len(values)):
 	    axarr2[1].set_xlabel('Time [yr]')
 	    axarr2[0].set_ylabel('Depth of unstable column [m]                                            ')
 	    if (k==0):
-	      axarr2[k].set_title('Main Column')
+	      axarr2[k].set_title('Deep basin')
 	    elif (k==1):
-	      axarr2[k].set_title('Secundary column')
+	      axarr2[k].set_title('Marginal basin')
 	    axarr2[k].plot(tseries[:,0]/12.,tseries[:,1], 's', ms=0.5)
 
   plt.savefig('pics/'+str(varname)+'_'+str(values[p])+'mixing.png', format='png', figsize=(11, 7), dpi=300, bbox_inches='tight')   
   
+  if ( (os.stat("main_mean_values.xy").st_size != 0) or (os.stat("secundary_mean_values.xy").st_size != 0) ):
+    plt.figure(4)
+    for k in range(2):	
+      if (k==0):
+        data = np.loadtxt('main_mean_values.xy')
+      elif (k==1):
+        data = np.loadtxt('secundary_mean_values.xy')
+      if k==0:
+        plt.plot(data[:,0],data[:,1], color='orange', label='Mean temperature of Deep basin')
+        plt.plot(data[:,0],data[:,2], color='blue', label='Mean salinity of Deep basin')
+      elif k==1:
+        plt.plot(data[:,0],data[:,1], color='yellow', label='Mean temperature of Marginal basin')
+        plt.plot(data[:,0],data[:,2], color='purple', label='Mean salinity of Marginal basin')
+      plt.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
 
 #Plotting legend:
 if (plot_legend == True):
