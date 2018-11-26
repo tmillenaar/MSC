@@ -342,12 +342,12 @@ do while (t.lt.tmax) 		!Main loop
     if ( max(maxval(w_salt),maxval(w_Temp)) /= 0 ) then  
       Dmax = max(maxval(D),maxval(D_T))
       Wlimit = (2.*Dmax)/(max( (maxval(w_salt)*maxval(w_salt)), (maxval(w_Temp)*maxval(w_Temp)) ))
-      dt = min(0.9*(dx*dx)/(2.e0*Dmax), 0.9*Wlimit )	!timestep set by diffusion and advection
+      dt = min(1.0*(dx*dx)/(2.e0*Dmax), 1.0*Wlimit )	!timestep set by diffusion and advection
       if (.NOT. check_conv) check_conv=.true.
     else
       check_conv=.false.
       Dmax = max(maxval(D),maxval(D_T)) 
-      dt = 0.9*(dx*dx)/(2.e0*Dmax)		!timestep set by diffusion only
+      dt = 1.0*(dx*dx)/(2.e0*Dmax)		!timestep set by diffusion only
     endif
     if ( dt < 0.0005 ) then !To avoid extreme runtimes. It generally works fine in practice but may bring artifacts. &
 			      ! If this happens, the results are clearly wrong or 'NAN'
@@ -632,7 +632,7 @@ do while (t.lt.tmax) 		!Main loop
 		!		write(44,*) t/yr2sec, '    in S bot:', s(imax),'    out S top:', S(0),'    in D top:', S_daughter(0), &
 		!			'    out D bot:', S_daughter(imax_daughter)
 		!		write(45,*) 's_in-s_out:',s(imax)-s(0),s(imax)-s(0)+evaporation,&
-		!	'	D_in-D_out:',s_daughter(0)-s_daughter(imax_daughter),s_daughter(0)-s_daughter(imax_daughter)+evaporation
+		!		D_in-D_out:',s_daughter(0)-s_daughter(imax_daughter),s_daughter(0)-s_daughter(imax_daughter)+evaporation
 
 
 			      open (20,file= fna)
@@ -654,7 +654,9 @@ do while (t.lt.tmax) 		!Main loop
 			     Smean= Smean + Sal(imax(j)+1,j)*dx/2.e0
 			     Tmean= Tmean/L(j)
 			     Smean= Smean/L(j)
-				 write(10+j,*) t, Tmean, Smean
+			     
+		             write(10+j,*) t/yr2sec, Tmean, Smean
+		             
 			!      HC= HC + h(imax+1,1)*Cp*density(h(imax+1,1),h(imax+1,2))*dx
 
 			!      Tmean2= 0.e0
@@ -737,7 +739,8 @@ if (ibcl == 0) then
 else if (ibcl == 1) then
 
    Dph= ( D(1)+D(0) )/2.e0
-   h1(0)= h1(1) + (dx/Dph)*bcl1
+!    Dph = 10**(-3.)
+   h1(0)= h1(1) + (dx/(1.0*Dph))*bcl1
 
 endif
 

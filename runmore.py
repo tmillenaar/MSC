@@ -6,13 +6,14 @@ import math
 
 #To be modified:
 
-startyear = 10        ## Starts at year 0, month 3
+startyear = 10       ## Starts at year 0, month 3
 start_month = 5        ## [0=jan, 11=dec]
-endyear = 13
+endyear = 16
+
+run_program = True     #if False, tries to plot with existing data
 
 plot_legend = True
 plot_mean_values = True
-run_program = False     #if False, tries to plot with existing data
 
 varname = 'Salt_diff_amp = ' #later on, adds the value of 'values[i]' behind it as well
 
@@ -64,7 +65,7 @@ for p in range(0,len(values)):
     print ('___________________________________________')
     os.system('gfortran advDiv_2_basins_DD_original.f90')
     # os.system('./a.out')
-    os.system('a.exe')
+    os.system('./a.out')
     
   month  = ['jan','feb','mar','apr','may','jun','jul','aug','sep','okt','nov','dec']
   #month = ['apr','may','jun','jul','aug','sep','okt','nov','dec','jan','feb','mar']
@@ -249,19 +250,37 @@ for p in range(0,len(values)):
   plt.savefig('pics/'+str(varname)+'_'+str(values[p])+'mixing.png', format='png', figsize=(11, 7), dpi=300, bbox_inches='tight')   
   
   if ( (os.stat("main_mean_values.xy").st_size != 0) or (os.stat("secundary_mean_values.xy").st_size != 0) ):
-    plt.figure(4)
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twinx()
     for k in range(2):	
       if (k==0):
         data = np.loadtxt('main_mean_values.xy')
       elif (k==1):
         data = np.loadtxt('secundary_mean_values.xy')
       if k==0:
-        plt.plot(data[:,0],data[:,1], color='orange', label='Mean temperature of Deep basin')
-        plt.plot(data[:,0],data[:,2], color='blue', label='Mean salinity of Deep basin')
+        ax1.plot(data[:,0],data[:,1], color='orange', label='Mean temperature of Deep basin')
+        ax2.plot(data[:,0],data[:,2], color='blue', label='Mean salinity of Deep basin')
       elif k==1:
-        plt.plot(data[:,0],data[:,1], color='yellow', label='Mean temperature of Marginal basin')
-        plt.plot(data[:,0],data[:,2], color='purple', label='Mean salinity of Marginal basin')
-      plt.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+        ax1.plot(data[:,0],data[:,1], color='yellow', label='Mean temperature of Marginal basin')
+        ax2.plot(data[:,0],data[:,2], color='purple', label='Mean salinity of Marginal basin')
+      ax1.legend(bbox_to_anchor=(0.01, 0.15), loc=2, borderaxespad=0.)
+      ax2.legend(bbox_to_anchor=(0.01, 0.3), loc=2, borderaxespad=0.)
+      ax1.set_ylabel('Temperature in deg C')
+      ax2.set_ylabel('Salinity in kg/m^3')
+      ax1.set_xlabel('Time in years')
+      
+      #fig, ax1 = plt.subplots()
+#ax1.plot(t, s1, 'b-')
+#ax1.set_xlabel('time (s)')
+## Make the y-axis label, ticks and tick labels match the line color.
+#ax1.set_ylabel('exp', color='b')
+#ax1.tick_params('y', colors='b')
+
+#ax2 = ax1.twinx()
+#s2 = np.sin(2 * np.pi * t)
+#ax2.plot(t, s2, 'r.')
+#ax2.set_ylabel('sin', color='r')
+#ax2.tick_params('y', colors='r')
 
 #Plotting legend:
 if (plot_legend == True):

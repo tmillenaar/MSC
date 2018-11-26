@@ -1,9 +1,9 @@
-Depth_Main_basin[m]=	1000
-Depth_sec._basin[m]=	150
+Depth_Main_basin[m]=	800
+Depth_sec._basin[m]=	250
 
 tmax[years]=		tmax_in_years
 Cp=			4.e3
-dx= 			1.e0
+dx= 			2.e0
 pb=			-5.1e0
 pc=			-1.e0
 tau= 			86400.
@@ -14,12 +14,12 @@ flowdepth=		5
 strait_depth= 		500.
 strait_width= 		10000
 U_lat= 			10
-width_basin1:		  70000.
-width_basin2:		  10000.
-length_basin1=        100000 
-length-basin2=        40000
+width_basin1:		70000.
+width_basin2:		10000.
+length_basin1=          100000 
+length-basin2=          40000
 
-Salt_diff_amplifier=	0.01
+Salt_diff_amplifier=	1
 Temp_diff_amplifier=	1.
 evaporation_amplifier1= 0.3
 evaporation_amplifier2= 0.3
