@@ -7,10 +7,10 @@ import math
 #To be modified:
 
 startyear = 10       ## Starts at year 0, month 3
-start_month = 5        ## [0=jan, 11=dec]
-endyear = 16
+start_month = 7        ## [0=jan, 11=dec]
+endyear = 20
 
-run_program = True     #if False, tries to plot with existing data
+run_program = False     #if False, tries to plot with existing data
 
 plot_legend = True
 plot_mean_values = True
@@ -65,7 +65,7 @@ for p in range(0,len(values)):
     print ('___________________________________________')
     os.system('gfortran advDiv_2_basins_DD_original.f90')
     # os.system('./a.out')
-    os.system('./a.out')
+    os.system('a.exe')
     
   month  = ['jan','feb','mar','apr','may','jun','jul','aug','sep','okt','nov','dec']
   #month = ['apr','may','jun','jul','aug','sep','okt','nov','dec','jan','feb','mar']
@@ -268,6 +268,7 @@ for p in range(0,len(values)):
       ax1.set_ylabel('Temperature in deg C')
       ax2.set_ylabel('Salinity in kg/m^3')
       ax1.set_xlabel('Time in years')
+    plt.savefig('pics/'+str(varname)+'_'+str(values[p])+'mean_values.png', format='png', figsize=(11, 7), dpi=300, bbox_inches='tight')   
       
       #fig, ax1 = plt.subplots()
 #ax1.plot(t, s1, 'b-')
